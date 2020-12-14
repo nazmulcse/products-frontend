@@ -9,14 +9,20 @@
             <div class="row justify-content-center">
                 <div class="col-md-4">
                     <div class="card shadow">
-                      <vue-progress-bar></vue-progress-bar>
+                      <loading-progress
+                          :indeterminate="indeterminate"
+                          :hide-background=true
+                          size="400"
+                          width="345"
+                          height="3"
+                        />
                         <div class="card-body">
                             <header>
                                 <h2 class="text-uppercase text-center h5 mb-4 text-secondary font-weight-bold">Login</h2>
                             </header>
                             <hr>
                             <vue-form :state="formstate" @submit.prevent="onSubmit">
-                              <validate tag="login">
+                              <validate tag="div">
                                 <div class="form-group">
                                     <label class="text-sm-left" for="login">Email</label>
                                     <input v-model="model.email" id="login" type="email" class="form-control" name="email" value="" required autofocus>
@@ -26,7 +32,7 @@
                                     </field-messages>
                                 </div>
                               </validate>
-                              <validate tag="password">
+                              <validate tag="div">
                                 <div class="form-group">
                                     <label for="password">Password</label>
                                     <input v-model="model.password"  id="password" type="password" class="form-control" name="password" required autocomplete="current-password">
@@ -60,7 +66,6 @@
 </template>
 
 <script>
-import VueForm from 'vue-form'
 export default {
   name: 'Login',
   data () {
@@ -70,40 +75,34 @@ export default {
         password: '',
         email: ''
       },
-      options: {
-        color: '#007AFF',
-        strokeWidth: 0.5,
-        duration: 1200,
-      }
+      indeterminate: false
     }
   },
   methods: {
-  onSubmit: function () {
-    if (this.formstate.$invalid) {
-      // alert user and exit early
-      //this.$refs.line.animate(1.0)
-      this.$Progress.start()
-      // return
-    } else {
-      /* axios.get('https://api.example.com/', {
-            params: {
-              page: this.page++,
-              per_page: this.pageSize,
-            }
-          })
-          .then(res => {
-            this.images.concat(res.data)
-            
-            // Stop scroll-loader
-            res.data.length < this.pageSize && (this.loadMore = false)
-          })
-          .catch(error => {
-            console.log(error);
-          }) */
+    onSubmit: function () {
+      if (this.formstate.$invalid) {
+        // alert user and exit early
+        // this.$refs.line.animate(1.0)
+        this.indeterminate = true
+        // return
+      } else {
+        /* axios.get('https://api.example.com/', {
+              params: {
+                page: this.page++,
+                per_page: this.pageSize,
+              }
+            })
+            .then(res => {
+              this.images.concat(res.data)
+              // Stop scroll-loader
+              res.data.length < this.pageSize && (this.loadMore = false)
+            })
+            .catch(error => {
+              console.log(error);
+            }) */
+      }
     }
-    
   }
-}
 }
 </script>
 
@@ -121,6 +120,6 @@ li {
   margin: 0 10px;
 }
 a {
-  color: #42b983;
+  color: #5442b9;
 }
 </style>

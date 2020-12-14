@@ -18,4 +18,9 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.vue-progress-path .progress {
+  stroke: blue;
+  padding: 0;
+  margin: 0;
+}
 </style>
