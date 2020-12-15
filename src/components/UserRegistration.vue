@@ -7,26 +7,35 @@
         <main class="main">
           <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="card shadow">
                       <loading-progress
                           :indeterminate="indeterminate"
                           :hide-background=true
-                          size="400"
-                          width="345"
+                          size="550"
+                          width="535"
                           height="3"
                         />
                         <div class="card-body">
                             <header>
-                                <h2 class="text-uppercase text-center h5 mb-4 text-secondary font-weight-bold">Login</h2>
+                                <h2 class="text-uppercase text-center h5 mb-4 text-secondary font-weight-bold">User Registration</h2>
                             </header>
                             <hr>
                             <vue-form :state="formstate" @submit.prevent="onSubmit">
                               <validate tag="div">
                                 <div class="form-group">
+                                    <label class="text-sm-left" for="full_name">Full Name</label>
+                                    <input v-model="model.full_name" id="full_name" type="text" class="form-control" name="full_name" value="" required autofocus>
+                                    <field-messages name="full_name" show="$dirty && $touched || $submitted">
+                                        <div class="text-danger" slot="required">Full Name is a required field</div>
+                                    </field-messages>
+                                </div>
+                              </validate>
+                              <validate tag="div">
+                                <div class="form-group">
                                     <label class="text-sm-left" for="login">Email</label>
-                                    <input v-model="model.email" id="login" type="email" class="form-control" name="email" value="" required autofocus>
-                                    <field-messages name="email" show="$dirty && $touched">
+                                    <input v-model="model.email" id="login" type="email" class="form-control" name="email" value="" required>
+                                    <field-messages name="email" show="$dirty && $touched || $submitted">
                                         <div class="text-danger" slot="required">Email is a required field</div>
                                         <div class="text-danger" slot="email">Email is not valid</div>
                                     </field-messages>
@@ -36,23 +45,32 @@
                                 <div class="form-group">
                                     <label for="password">Password</label>
                                     <input v-model="model.password"  id="password" type="password" class="form-control" name="password" required autocomplete="current-password">
-                                     <field-messages name="password" show="$dirty && $touched">
+                                     <field-messages name="password" show="$dirty && $touched || $submitted">
                                         <div class="text-danger" slot="required">Password is a required field</div>
+                                    </field-messages>
+                                </div>
+                              </validate>
+                              <validate tag="div">
+                                <div class="form-group">
+                                    <label for="confirm_password">Password</label>
+                                    <input v-model="model.confirm_password"  id="confirm_password" type="password" class="form-control" name="confirm_password" required>
+                                     <field-messages name="confirm_password" show="$dirty && $touched || $submitted">
+                                        <div class="text-danger" slot="required">Confirm password is a required field</div>
                                     </field-messages>
                                 </div>
                               </validate>
                                 <div class="form-group row mb-0">
                                     <div class="col text-sm-right">
                                         <button type="submit" class="btn btn-primary">
-                                            Login
+                                            Submit
                                         </button>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="text-center">
-                                  New User?
-                                  <router-link :to="{name: 'UserRegistration'}">
-                                    <button id="myButton" class="btn btn-link">Register</button>
+                                  Already have an account?
+                                  <router-link :to="{name: 'Login'}">
+                                    <button id="login" class="btn btn-link">Login</button>
                                   </router-link>
                               </div>
                             </vue-form>
@@ -73,12 +91,14 @@
 
 <script>
 export default {
-  name: 'Login',
+  name: 'UserRegistration',
   data () {
     return {
       formstate: {},
       model: {
+        full_name: '',
         password: '',
+        confirm_password: '',
         email: ''
       },
       indeterminate: false
@@ -88,9 +108,7 @@ export default {
     onSubmit: function () {
       if (this.formstate.$invalid) {
         // alert user and exit early
-        // this.$refs.line.animate(1.0)
         this.indeterminate = true
-        // return
       } else {
         /* axios.get('https://api.example.com/', {
               params: {
