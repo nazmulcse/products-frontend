@@ -118,22 +118,25 @@ export default {
     onSubmit: function () {
       if (this.formstate.$invalid) {
         // alert user and exit early
-        this.indeterminate = true
+        // this.$router.push({name: 'Login'})
       } else {
-        /* axios.get('https://api.example.com/', {
-              params: {
-                page: this.page++,
-                per_page: this.pageSize,
-              }
-            })
-            .then(res => {
-              this.images.concat(res.data)
-              // Stop scroll-loader
-              res.data.length < this.pageSize && (this.loadMore = false)
-            })
-            .catch(error => {
-              console.log(error);
-            }) */
+        this.indeterminate = true
+        let self = this
+        this.axios.post(this.$getConst('SIGNUP_URL'), {
+          name: this.full_name,
+          email: this.email,
+          password: this.password
+        })
+          .then(function (response) {
+            // console.log(response)
+            // this.indeterminate = false
+            self.$toast.success('Registration completed successfully! Please login now')
+            self.$router.push({name: 'Login'})
+          })
+          .catch(error => {
+            this.indeterminate = false
+            console.log(error)
+          })
       }
     }
   }
