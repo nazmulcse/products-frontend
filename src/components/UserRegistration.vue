@@ -107,6 +107,8 @@ export default {
   watch: {
     // whenever question changes, this function will run
     confirm_password: function (newConfirmPassword, oldConfirmPassword) {
+      // this.$storage.set('num', 110)
+      console.log(this.$storage.get('num'))
       if (this.password !== newConfirmPassword) {
         this.confirm_password_error = 'Not matched with password'
       } else {

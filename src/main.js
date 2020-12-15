@@ -16,6 +16,7 @@ import Toast from 'vue-toastification'
 // Import the CSS or use your own!
 import 'vue-toastification/dist/index.css'
 import Constant from './components/Constant'
+import { install as storageInstall } from 'vue-storage-plus'
 
 Vue.config.productionTip = false
 
@@ -25,6 +26,7 @@ Vue.use(VueProgress, {
   hideBackground: true,
   indeterminate: true
 })
+Vue.use(storageInstall)
 Vue.use(Toast)
 Vue.use(BootstrapVue)
 Vue.use(VueForm)
