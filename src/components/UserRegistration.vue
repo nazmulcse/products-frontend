@@ -25,7 +25,7 @@
                               <validate tag="div">
                                 <div class="form-group">
                                     <label class="text-sm-left" for="full_name">Full Name</label>
-                                    <input v-model="model.full_name" id="full_name" type="text" class="form-control" name="full_name" value="" required autofocus>
+                                    <input v-model="full_name" id="full_name" type="text" class="form-control" name="full_name" value="" required autofocus>
                                     <field-messages name="full_name" show="$dirty && $touched || $submitted">
                                         <div class="text-danger" slot="required">Full Name is a required field</div>
                                     </field-messages>
@@ -34,7 +34,7 @@
                               <validate tag="div">
                                 <div class="form-group">
                                     <label class="text-sm-left" for="login">Email</label>
-                                    <input v-model="model.email" id="login" type="email" class="form-control" name="email" value="" required>
+                                    <input v-model="email" id="login" type="email" class="form-control" name="email" value="" required>
                                     <field-messages name="email" show="$dirty && $touched || $submitted">
                                         <div class="text-danger" slot="required">Email is a required field</div>
                                         <div class="text-danger" slot="email">Email is not valid</div>
@@ -44,7 +44,7 @@
                               <validate tag="div">
                                 <div class="form-group">
                                     <label for="password">Password</label>
-                                    <input v-model="model.password"  id="password" type="password" class="form-control" name="password" required autocomplete="current-password">
+                                    <input v-model="password"  id="password" type="password" class="form-control" name="password" required autocomplete="current-password">
                                      <field-messages name="password" show="$dirty && $touched || $submitted">
                                         <div class="text-danger" slot="required">Password is a required field</div>
                                     </field-messages>
@@ -52,11 +52,12 @@
                               </validate>
                               <validate tag="div">
                                 <div class="form-group">
-                                    <label for="confirm_password">Password</label>
-                                    <input v-model="model.confirm_password"  id="confirm_password" type="password" class="form-control" name="confirm_password" required>
+                                    <label for="confirm_password">Confirm Password</label>
+                                    <input v-model="confirm_password"  id="confirm_password" type="password" class="form-control" name="confirm_password" required>
                                      <field-messages name="confirm_password" show="$dirty && $touched || $submitted">
                                         <div class="text-danger" slot="required">Confirm password is a required field</div>
                                     </field-messages>
+                                    <div class="text-danger">{{ confirm_password_error }}</div>
                                 </div>
                               </validate>
                                 <div class="form-group row mb-0">
@@ -95,13 +96,22 @@ export default {
   data () {
     return {
       formstate: {},
-      model: {
-        full_name: '',
-        password: '',
-        confirm_password: '',
-        email: ''
-      },
+      confirm_password_error: '',
+      full_name: '',
+      email: '',
+      password: '',
+      confirm_password: '',
       indeterminate: false
+    }
+  },
+  watch: {
+    // whenever question changes, this function will run
+    confirm_password: function (newConfirmPassword, oldConfirmPassword) {
+      if (this.password !== newConfirmPassword) {
+        this.confirm_password_error = 'Not matched with password'
+      } else {
+        this.confirm_password_error = ''
+      }
     }
   },
   methods: {
