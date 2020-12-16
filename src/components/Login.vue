@@ -90,7 +90,7 @@ export default {
       } else {
         this.indeterminate = true
         let self = this
-        this.axios.post(this.$getConst('LOGIN_URL'), {
+        this.axios.post('auth/login', {
           email: this.model.email,
           password: this.model.password
         })

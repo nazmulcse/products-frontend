@@ -17,6 +17,10 @@ import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 import Constant from './components/Constant'
 import { install as storageInstall } from 'vue-storage-plus'
+import vueTopprogress from 'vue-top-progress'
+
+axios.defaults.baseURL = 'http://localhost:8080/api/'
+// axios.defaults.headers.common['Authorization'] = `Bearer ${storage.get('token')}`
 
 Vue.config.productionTip = false
 
@@ -33,6 +37,7 @@ Vue.use(VueForm)
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
 Vue.use(Constant)
+Vue.use(vueTopprogress)
 
 // URL and endpoint constants
 // const API_URL = 'http://localhost:8080/api/'
@@ -42,6 +47,9 @@ Vue.use(Constant)
 /* eslint-disable */
 new Vue({
   el: '#app',
+  created() {
+    this.axios.defaults.headers.common['Authorization'] = `Bearer ${this.$storage.get('token')}`
+  },
   router,
   components: { App },
   template: '<App/>'

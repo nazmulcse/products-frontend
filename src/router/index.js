@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 import UserRegistration from '@/components/UserRegistration'
 import ProductList from '@/components/ProductList'
+import ProductEntry from '@/components/ProductEntry'
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/product-list',
       name: 'ProductList',
       component: ProductList
+    },
+    {
+      path: '/edit-product/:id',
+      name: 'EditProduct',
+      component: ProductEntry
     }
   ]
 })

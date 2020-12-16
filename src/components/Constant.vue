@@ -2,7 +2,8 @@
 const API_URL = 'http://localhost:8080/api/'
 const URL = {
   SIGNUP_URL: API_URL + 'auth/register',
-  LOGIN_URL: API_URL + 'auth/login'
+  LOGIN_URL: API_URL + 'auth/login',
+  PRODUCT_URL: API_URL + 'auth/product'
 }
 URL.install = function (Vue) {
   Vue.prototype.$getConst = (key) => {

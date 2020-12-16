@@ -2,26 +2,49 @@
 <div class="d-flex h-100 align-items-center">
     <div class="w-100">
         <div class="text-center">
-            <h1 class="font-weight-bold h3">Product List</h1>
+            <h1 class="font-weight-bold h3"></h1>
         </div>
         <main class="main">
           <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="card shadow">
-                      <loading-progress
-                          :indeterminate="indeterminate"
-                          :hide-background=true
-                          size="550"
-                          width="535"
-                          height="3"
-                        />
+                      <template>
+                        <vue-topprogress ref="topProgress"></vue-topprogress>
+                      </template>
                         <div class="card-body">
                             <header>
-                                <h2 class="text-uppercase text-center h5 mb-4 text-secondary font-weight-bold">Product List</h2>
+                                <h2 class="text-uppercase text-center h5 text-secondary font-weight-bold">Product List</h2>
                             </header>
                             <hr>
-                            Product List here.....
+                            <table class="table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th scope="col">#</th>
+                                  <th scope="col">Title</th>
+                                  <th scope="col">Description</th>
+                                  <th scope="col">Price</th>
+                                  <th scope="col">Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr v-for="(item, index) in products" :key="item.id">
+                                  <th scope="row">{{ ++index }}</th>
+                                  <td>{{ item.title }}</td>
+                                  <td>{{ item.description }}</td>
+                                  <td>{{ item.price }}</td>
+                                  <td>
+                                    <router-link :to="{name: 'EditProduct', params:{id:item.id}}">
+                                      <button id="myButton" class="btn btn-sm btn-primary">Edit</button>
+                                    </router-link>
+                                    <router-link :to="{name: 'UserRegistration'}">
+                                      <button id="myButton" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </router-link>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -38,55 +61,34 @@
 </template>
 
 <script>
+/* const header = {
+  headers: { Authorization: `Bearer ${this.$storage.get('token')}` }
+} */
 export default {
-  name: 'UserRegistration',
+  name: 'ProductList',
+  mounted: function () {
+    this.getProducts()
+    this.$refs.topProgress.start()
+  },
   data () {
     return {
-      formstate: {},
-      confirm_password_error: '',
-      full_name: '',
-      email: '',
-      password: '',
-      confirm_password: '',
-      indeterminate: false
-    }
-  },
-  watch: {
-    // whenever question changes, this function will run
-    confirm_password: function (newConfirmPassword, oldConfirmPassword) {
-      // this.$storage.set('num', 110)
-      console.log(this.$storage.get('num'))
-      if (this.password !== newConfirmPassword) {
-        this.confirm_password_error = 'Not matched with password'
-      } else {
-        this.confirm_password_error = ''
-      }
+      products: []
     }
   },
   methods: {
-    onSubmit: function () {
-      if (this.formstate.$invalid) {
-        // alert user and exit early
-        // this.$router.push({name: 'Login'})
-      } else {
-        this.indeterminate = true
-        let self = this
-        this.axios.post(this.$getConst('SIGNUP_URL'), {
-          name: this.full_name,
-          email: this.email,
-          password: this.password
+    getProducts: function () {
+      let self = this
+      // console.log(`Bearer ${this.$storage.get('token')}`)
+      this.axios.get('auth/product', {
+        headers: { Authorization: `Bearer ${this.$storage.get('token')}` }
+      })
+        .then(function (response) {
+          self.products = response.data.data
+          self.$refs.topProgress.done()
         })
-          .then(function (response) {
-            // console.log(response)
-            // this.indeterminate = false
-            self.$toast.success('Registration completed successfully! Please login now')
-            self.$router.push({name: 'Login'})
-          })
-          .catch(error => {
-            this.indeterminate = false
-            console.log(error)
-          })
-      }
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }

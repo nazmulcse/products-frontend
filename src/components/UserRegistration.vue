@@ -124,7 +124,7 @@ export default {
       } else {
         this.indeterminate = true
         let self = this
-        this.axios.post(this.$getConst('SIGNUP_URL'), {
+        this.axios.post('auth/register', {
           name: this.full_name,
           email: this.email,
           password: this.password
