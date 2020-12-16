@@ -99,12 +99,10 @@ export default {
     }
   },
   methods: {
-    onSubmit: function () {
+    getProducts: function () {
       let self = this
       // console.log(`Bearer ${this.$storage.get('token')}`)
-      this.axios.post('auth/product/update/' + this.$route.params.id, {
-        headers: { Authorization: `Bearer ${this.$storage.get('token')}` }
-      })
+      this.axios.get('auth/product/edit/' + this.$route.params.id)
         .then(function (response) {
           self.product_title = response.data.data.title
           self.product_description = response.data.data.description
@@ -117,6 +115,31 @@ export default {
             self.$router.push({name: 'Login'})
           }
         })
+    },
+    onSubmit: function () {
+      if (this.formstate.$invalid) {
+      } else {
+        this.$refs.topProgress.start()
+        let self = this
+        this.axios.post('auth/product/update/' + this.$route.params.id, {
+          product_id: this.product_id,
+          title: this.product_title,
+          description: this.product_description,
+          price: this.product_price
+        })
+          .then(function (response) {
+            self.$toast.success('Product updated successfully')
+            self.$refs.topProgress.done()
+          })
+          .catch(error => {
+            console.log(error)
+            if (error.response.status === 401) {
+              self.$toast.error('Sorry, You are unauthorized user')
+            } else {
+              self.$toast.error('Sorry, An error occured. Try again')
+            }
+          })
+      }
     }
   }
 }

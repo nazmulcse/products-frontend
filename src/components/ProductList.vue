@@ -79,9 +79,7 @@ export default {
     getProducts: function () {
       let self = this
       // console.log(`Bearer ${this.$storage.get('token')}`)
-      this.axios.get('auth/product', {
-        headers: { Authorization: `Bearer ${this.$storage.get('token')}` }
-      })
+      this.axios.get('auth/product')
         .then(function (response) {
           self.products = response.data.data
           self.$refs.topProgress.done()
