@@ -136,7 +136,7 @@ export default {
             self.$router.push({name: 'Login'})
           })
           .catch(error => {
-            this.indeterminate = false
+            self.indeterminate = false
             console.log(error)
           })
       }

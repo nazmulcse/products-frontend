@@ -87,25 +87,29 @@ export default {
   methods: {
     onSubmit: function () {
       if (this.formstate.$invalid) {
-        // alert user and exit early
-        // this.$refs.line.animate(1.0)
-        this.indeterminate = true
-        // return
       } else {
-        /* axios.get('https://api.example.com/', {
-              params: {
-                page: this.page++,
-                per_page: this.pageSize,
-              }
-            })
-            .then(res => {
-              this.images.concat(res.data)
-              // Stop scroll-loader
-              res.data.length < this.pageSize && (this.loadMore = false)
-            })
-            .catch(error => {
-              console.log(error);
-            }) */
+        this.indeterminate = true
+        let self = this
+        this.axios.post(this.$getConst('LOGIN_URL'), {
+          email: this.model.email,
+          password: this.model.password
+        })
+          .then(function (response) {
+            console.log(response.data)
+            self.$storage.set('token', response.data.access_token)
+            self.$toast.success('Login successfull')
+            self.$router.push({name: 'ProductList'})
+          })
+          .catch(function (error) {
+            // handle error
+            self.indeterminate = false
+            console.log(error.response.status)
+            if (error.response.status === 401) {
+              self.$toast.error('Sorry, Email and password not matched with our credentials')
+            } else {
+              self.$toast.error('Sorry, An error occured. Try again')
+            }
+          })
       }
     }
   }
