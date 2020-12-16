@@ -32,7 +32,7 @@
                                 <div class="form-group">
                                     <label class="text-sm-left" for="product_title">Title</label>
                                     <input v-model="product_title" id="product_title" type="text" class="form-control" name="product_title" value="" required autofocus>
-                                    <field-messages name="product_title" show="$dirty && $touched || $submitted">
+                                    <field-messages name="product_title" show="$submitted">
                                         <div class="text-danger" slot="required">This field is required</div>
                                     </field-messages>
                                 </div>
@@ -41,7 +41,7 @@
                                 <div class="form-group">
                                     <label class="text-sm-left" for="product_description">Description</label>
                                     <input v-model="product_description" id="product_description" type="text" class="form-control" name="product_description" value="" required>
-                                    <field-messages name="product_description" show="$dirty && $touched || $submitted">
+                                    <field-messages name="product_description" show="$submitted">
                                         <div class="text-danger" slot="required">This field is required</div>
                                     </field-messages>
                                 </div>
@@ -50,7 +50,7 @@
                                 <div class="form-group">
                                     <label class="text-sm-left" for="product_price">Price</label>
                                     <input v-model="product_price" id="product_price" type="text" class="form-control" name="product_price" value="" required>
-                                    <field-messages name="product_price" show="$dirty && $touched || $submitted">
+                                    <field-messages name="product_price" show="$submitted">
                                         <div class="text-danger" slot="required">This field is required</div>
                                     </field-messages>
                                 </div>
@@ -58,7 +58,7 @@
                                 <div class="form-group row mb-0">
                                     <div class="col text-sm-right">
                                         <button type="submit" class="btn btn-primary">
-                                            Update Product
+                                            {{ buttonLabel }}
                                         </button>
                                     </div>
                                 </div>
@@ -86,8 +86,11 @@
 export default {
   name: 'ProductList',
   mounted: function () {
-    this.getProducts()
-    this.$refs.topProgress.start()
+    if (this.$route.params.id) {
+      this.getProducts()
+      this.buttonLabel = 'Update Product'
+      this.$refs.topProgress.start()
+    }
   },
   data () {
     return {
@@ -95,7 +98,8 @@ export default {
       product_id: this.$route.params.id,
       product_title: '',
       product_description: '',
-      product_price: ''
+      product_price: '',
+      buttonLabel: 'Save Product'
     }
   },
   methods: {
@@ -111,6 +115,7 @@ export default {
         })
         .catch(error => {
           console.log(error)
+          self.$refs.topProgress.done()
           if (error.response.status === 401) {
             self.$router.push({name: 'Login'})
           }
@@ -121,14 +126,22 @@ export default {
       } else {
         this.$refs.topProgress.start()
         let self = this
-        this.axios.post('auth/product/update/' + this.$route.params.id, {
+        this.axios.post('auth/product/update', {
           product_id: this.product_id,
           title: this.product_title,
           description: this.product_description,
           price: this.product_price
         })
           .then(function (response) {
-            self.$toast.success('Product updated successfully')
+            if (self.product_id) {
+              self.$toast.success('Product updated successfully')
+            } else {
+              self.product_id = ''
+              self.product_title = ''
+              self.product_description = ''
+              self.product_price = ''
+              self.$toast.success('Product saved successfully')
+            }
             self.$refs.topProgress.done()
           })
           .catch(error => {

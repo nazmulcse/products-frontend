@@ -30,6 +30,11 @@ export default new Router({
       path: '/edit-product/:id',
       name: 'EditProduct',
       component: ProductEntry
+    },
+    {
+      path: '/add-product',
+      name: 'AddProduct',
+      component: ProductEntry
     }
   ]
 })
