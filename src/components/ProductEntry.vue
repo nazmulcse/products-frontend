@@ -16,7 +16,7 @@
                             <header>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <h2 class="text-uppercase h5 text-secondary font-weight-bold">Edit Product</h2>
+                                        <h2 class="text-uppercase h5 text-secondary font-weight-bold">{{ pageTitle }}</h2>
                                     </div>
                                     <div class="col-sm-6 text-right">
                                         <router-link :to="{name: 'ProductList'}">
@@ -27,7 +27,7 @@
                             </header>
                             <hr>
 
-                            <vue-form :state="formstate" @submit.prevent="onSubmit">
+                            <vue-form enctype="multipart/form-data" :state="formstate" @submit.prevent="onSubmit">
                               <validate tag="div">
                                 <div class="form-group">
                                     <label class="text-sm-left" for="product_title">Title</label>
@@ -49,10 +49,27 @@
                               <validate tag="div">
                                 <div class="form-group">
                                     <label class="text-sm-left" for="product_price">Price</label>
-                                    <input v-model="product_price" id="product_price" type="text" class="form-control" name="product_price" value="" required>
+                                    <input v-model="product_price" id="product_price" type="number" class="form-control" name="product_price" value="" required>
                                     <field-messages name="product_price" show="$submitted">
                                         <div class="text-danger" slot="required">This field is required</div>
                                     </field-messages>
+                                </div>
+                              </validate>
+                              <validate tag="div">
+                                <div class="file-upload-group form-group">
+                                  <label for="image_ward_meeting" class=" d-block">
+                                      Image
+                                  </label>
+                                  <div class="file-upload-item ">
+                                      <div class="input-group">
+                                          <div class="custom-file">
+                                              <input accept="image/jpeg,image/jpeg,image/gif,image/png" type="file" name="image" @change="selectFile" class="custom-file-input ">
+                                              <label class="custom-file-label" for="image">
+                                                  {{ customFileLabel }}
+                                              </label>
+                                          </div>
+                                      </div>
+                                  </div>
                                 </div>
                               </validate>
                                 <div class="form-group row mb-0">
@@ -89,20 +106,28 @@ export default {
     if (this.$route.params.id) {
       this.getProducts()
       this.buttonLabel = 'Update Product'
+      this.pageTitle = 'Edit Product'
       this.$refs.topProgress.start()
     }
   },
   data () {
     return {
       formstate: {},
-      product_id: this.$route.params.id,
+      product_id: this.$route.params.id ? this.$route.params.id : '',
+      customFileLabel: 'Choose file',
+      pageTitle: 'Add Product',
       product_title: '',
       product_description: '',
       product_price: '',
+      product_image: null,
       buttonLabel: 'Save Product'
     }
   },
   methods: {
+    selectFile: function (event) {
+      this.product_image = event.target.files[0]
+      this.customFileLabel = event.target.files[0].name
+    },
     getProducts: function () {
       let self = this
       // console.log(`Bearer ${this.$storage.get('token')}`)
@@ -126,20 +151,20 @@ export default {
       } else {
         this.$refs.topProgress.start()
         let self = this
-        this.axios.post('auth/product/update', {
-          product_id: this.product_id,
-          title: this.product_title,
-          description: this.product_description,
-          price: this.product_price
-        })
+        const data = new FormData()
+        console.log(this.product_id)
+        data.append('product_id', this.product_id)
+        data.append('title', this.product_title)
+        data.append('description', this.product_description)
+        data.append('price', this.product_price)
+        data.append('image', this.product_image)
+        this.axios.post('auth/product/update', data)
           .then(function (response) {
+            self.product_image = null
             if (self.product_id) {
               self.$toast.success('Product updated successfully')
             } else {
-              self.product_id = ''
-              self.product_title = ''
-              self.product_description = ''
-              self.product_price = ''
+              // self.$router.go(0)
               self.$toast.success('Product saved successfully')
             }
             self.$refs.topProgress.done()

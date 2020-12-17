@@ -18,8 +18,6 @@ import 'vue-toastification/dist/index.css'
 import Constant from './components/Constant'
 import { install as storageInstall } from 'vue-storage-plus'
 import vueTopprogress from 'vue-top-progress'
-
-axios.defaults.baseURL = 'http://localhost:8080/api/'
 // axios.defaults.headers.common['Authorization'] = `Bearer ${storage.get('token')}`
 
 Vue.config.productionTip = false
@@ -49,6 +47,7 @@ new Vue({
   el: '#app',
   created() {
     this.axios.defaults.headers.common['Authorization'] = `Bearer ${this.$storage.get('token')}`
+    this.axios.defaults.baseURL = this.$getConst('API_URL')
   },
   router,
   components: { App },

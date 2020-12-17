@@ -29,11 +29,12 @@
                             <table class="table">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th scope="col">#</th>
-                                  <th scope="col">Title</th>
-                                  <th scope="col">Description</th>
-                                  <th scope="col">Price</th>
-                                  <th scope="col">Action</th>
+                                  <th width="5%" scope="col">#</th>
+                                  <th width="20%" scope="col">Title</th>
+                                  <th width="20%" scope="col">Description</th>
+                                  <th width="20%" scope="col">Price</th>
+                                  <th width="20%" scope="col">Image</th>
+                                  <th width="35%" scope="col">Action</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -42,6 +43,11 @@
                                   <td>{{ item.title }}</td>
                                   <td>{{ item.description }}</td>
                                   <td>{{ item.price }}</td>
+                                  <td>
+                                    <a v-if="item.image !== null && item.image !== ''" :href="baseURL + item.image" target="_blank" rel="noopener">
+                                      <img width="50" height="50" :src="baseURL + item.image" class="card-img card-img-scheme" alt="">
+                                    </a>
+                                  </td>
                                   <td>
                                     <router-link :to="{name: 'EditProduct', params:{id:item.id}}">
                                       <button id="myButton" class="btn btn-sm btn-primary">Edit</button>
@@ -75,12 +81,14 @@ export default {
   name: 'ProductList',
   mounted: function () {
     this.axios.defaults.headers.common['Authorization'] = `Bearer ${this.$storage.get('token')}`
+    this.axios.defaults.baseURL = this.$getConst('API_URL')
     this.getProducts()
     this.$refs.topProgress.start()
   },
   data () {
     return {
-      products: []
+      products: [],
+      baseURL: this.$getConst('BASE_URL')
     }
   },
   methods: {
