@@ -1,12 +1,12 @@
 <template>
-<div class="d-flex h-100 align-items-center">
+<div class="product">
+  <Header></Header>
     <div class="w-100">
         <div class="text-center">
             <h1 class="font-weight-bold h3"></h1>
         </div>
         <main class="main">
           <div class="container">
-            <Button></Button>
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="card shadow">

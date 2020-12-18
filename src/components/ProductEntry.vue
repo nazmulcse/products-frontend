@@ -1,12 +1,12 @@
 <template>
-<div class="d-flex h-100 align-items-center">
+<div class="product">
+  <Header></Header>
     <div class="w-100">
         <div class="text-center">
             <h1 class="font-weight-bold h3"></h1>
         </div>
         <main class="main">
           <div class="container">
-            <Button></Button>
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card shadow">
@@ -159,10 +159,13 @@ export default {
         const data = new FormData()
         console.log(this.product_id)
         data.append('product_id', this.product_id)
+        data.append('user_id', this.$storage.get('user_id'))
         data.append('title', this.product_title)
         data.append('description', this.product_description)
         data.append('price', this.product_price)
-        data.append('image', this.product_image)
+        if (this.product_image) {
+          data.append('image', this.product_image)
+        }
         this.axios.post('auth/product/update', data)
           .then(function (response) {
             self.product_image = null

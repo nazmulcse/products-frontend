@@ -95,8 +95,10 @@ export default {
           password: this.model.password
         })
           .then(function (response) {
-            // console.log(response.data)
+            console.log(response.data.user)
             self.$storage.set('token', response.data.access_token)
+            self.$storage.set('user_id', response.data.user.id)
+            self.$storage.set('user_name', response.data.user.name)
             self.$toast.success('Login successfull')
             self.$router.push({name: 'ProductList'})
           })

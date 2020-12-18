@@ -19,6 +19,7 @@ import Constant from './components/Constant'
 import { install as storageInstall } from 'vue-storage-plus'
 import vueTopprogress from 'vue-top-progress'
 import Button from '@/components/Button'
+import Header from '@/components/Header'
 // axios.defaults.headers.common['Authorization'] = `Bearer ${storage.get('token')}`
 
 Vue.config.productionTip = false
@@ -38,6 +39,7 @@ Vue.use(VueRouter)
 Vue.use(Constant)
 Vue.use(vueTopprogress)
 Vue.component('Button', Button)
+Vue.component('Header', Header)
 
 // URL and endpoint constants
 // const API_URL = 'http://localhost:8080/api/'

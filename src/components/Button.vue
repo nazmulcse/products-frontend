@@ -1,11 +1,9 @@
 <template>
-    <div class="form-group row mt-3 px-5">
-      <div class="col text-sm-right">
-          <button @click="logout" type="button" class="btn btn-primary">
+    <div class="text-sm-right">
+          <button @click="logout" type="button" class="btn btn-outline-primary">
               Logout
           </button>
       </div>
-    </div>
 </template>
 
 <script>
