@@ -26,7 +26,7 @@
                                 <div class="form-group">
                                     <label class="text-sm-left" for="login">Email</label>
                                     <input v-model="model.email" id="login" type="email" class="form-control" name="email" value="" required autofocus>
-                                    <field-messages name="email" show="$dirty && $touched">
+                                    <field-messages name="email" show="$dirty && $touched || $submitted">
                                         <div class="text-danger" slot="required">Email is a required field</div>
                                         <div class="text-danger" slot="email">Email is not valid</div>
                                     </field-messages>
@@ -36,7 +36,7 @@
                                 <div class="form-group">
                                     <label for="password">Password</label>
                                     <input v-model="model.password"  id="password" type="password" class="form-control" name="password" required autocomplete="current-password">
-                                     <field-messages name="password" show="$dirty && $touched">
+                                     <field-messages name="password" show="$dirty && $touched || $submitted">
                                         <div class="text-danger" slot="required">Password is a required field</div>
                                     </field-messages>
                                 </div>
@@ -95,7 +95,7 @@ export default {
           password: this.model.password
         })
           .then(function (response) {
-            console.log(response.data)
+            // console.log(response.data)
             self.$storage.set('token', response.data.access_token)
             self.$toast.success('Login successfull')
             self.$router.push({name: 'ProductList'})
