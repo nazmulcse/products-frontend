@@ -104,11 +104,15 @@
 export default {
   name: 'ProductList',
   mounted: function () {
-    if (this.$route.params.id) {
-      this.getProducts()
-      this.buttonLabel = 'Update Product'
-      this.pageTitle = 'Edit Product'
-      this.$refs.topProgress.start()
+    if (this.$storage.get('token')) {
+      if (this.$route.params.id) {
+        this.getProducts()
+        this.buttonLabel = 'Update Product'
+        this.pageTitle = 'Edit Product'
+        this.$refs.topProgress.start()
+      }
+    } else {
+      this.$router.push({name: 'Login'}).catch(() => {})
     }
   },
   data () {
